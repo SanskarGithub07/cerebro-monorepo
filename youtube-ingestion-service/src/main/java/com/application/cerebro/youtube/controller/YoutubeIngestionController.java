@@ -3,6 +3,7 @@ package com.application.cerebro.youtube.controller;
 import com.application.cerebro.youtube.dto.TranscriptRequestDto;
 import com.application.cerebro.youtube.dto.TranscriptResponseDto;
 import com.application.cerebro.youtube.service.YoutubeIngestionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class YoutubeIngestionController {
 
     private final YoutubeIngestionService youtubeIngestionService;
     @PostMapping("/get-transcript")
-    public ResponseEntity<TranscriptResponseDto> fetchTranscriptFromLink(@RequestBody TranscriptRequestDto transcriptRequestDto){
+    public ResponseEntity<TranscriptResponseDto> fetchTranscriptFromLink(@Valid @RequestBody TranscriptRequestDto transcriptRequestDto){
         TranscriptResponseDto responseBody = youtubeIngestionService.fetchTranscriptFromLink(transcriptRequestDto);
         return new ResponseEntity<>(responseBody, HttpStatus.OK);
     }
