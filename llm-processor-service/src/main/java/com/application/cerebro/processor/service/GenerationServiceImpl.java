@@ -1,7 +1,9 @@
 package com.application.cerebro.processor.service;
 
 import com.application.cerebro.processor.dto.*;
-import com.application.cerebro.processor.entity.Summary;
+import com.application.cerebro.processor.entity.*;
+import com.application.cerebro.processor.repository.FlashCardDeckRepository;
+import com.application.cerebro.processor.repository.QuizRepository;
 import com.application.cerebro.processor.repository.SummaryRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -17,12 +19,20 @@ import java.util.List;
 public class GenerationServiceImpl implements GenerationService {
     private final OpenAiChatClient openAiChatClient;
     private final SummaryRepository summaryRepository;
-    @Override
-    public SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto){
+    private final QuizRepository quizRepository;
+    private final FlashCardDeckRepository flashCardDeckRepository;
+
+    public String extractTranscriptFromJson(TranscriptRequestDto transcriptRequestDto){
         String transcript = "";
         for(TranscriptItem transcriptItem : transcriptRequestDto.getTranscript()){
             transcript += transcriptItem.getText() + " ";
         }
+
+        return transcript;
+    }
+    @Override
+    public SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto){
+        String transcript = extractTranscriptFromJson(transcriptRequestDto);
 
         String prompt = """
             Answer the user query by providing 10-15 detailed key points, each with a concise heading and a simple explanation.
@@ -58,10 +68,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public FlashCardResponseDto generateFlashCardsFromTranscript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException {
-        String transcript = "";
-        for(TranscriptItem transcriptItem : transcriptRequestDto.getTranscript()){
-            transcript += transcriptItem.getText() + " ";
-        }
+        String transcript = extractTranscriptFromJson(transcriptRequestDto);
 
         String prompt = String.format("""
                 You are given a transcript of a YouTube lecture.
@@ -100,6 +107,20 @@ public class GenerationServiceImpl implements GenerationService {
                     .videoId(transcriptRequestDto.getVideoId())
                     .build();
 
+            FlashCardDeck flashCardDeck = FlashCardDeck.builder()
+                    .videoId(transcriptRequestDto.getVideoId())
+                    .build();
+
+            List<FlashCard> flashCards = flashCardItemList.stream()
+                    .map(cardItem -> FlashCard.builder()
+                            .deck(flashCardDeck)
+                            .title(cardItem.getTitle())
+                            .content(cardItem.getContent())
+                            .build()).toList();
+
+            flashCardDeck.setFlashCardList(flashCards);
+            flashCardDeckRepository.save(flashCardDeck);
+
             return flashCardResponseDto;
         } else {
             throw new RuntimeException("Could not extract valid JSON array from LLM response.");
@@ -108,10 +129,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     @Override
     public QuizResponseDto generateQuizFromTrancript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException {
-        String transcript = "";
-        for (TranscriptItem transcriptItem : transcriptRequestDto.getTranscript()) {
-            transcript += transcriptItem.getText() + " ";
-        }
+        String transcript = extractTranscriptFromJson(transcriptRequestDto);
 
         String prompt = """
                 You are given a transcript of a YouTube lecture.
@@ -159,6 +177,27 @@ public class GenerationServiceImpl implements GenerationService {
 
             ObjectMapper objectMapper = new ObjectMapper();
             QuizResponseDto quizResponseDto = objectMapper.readValue(json, QuizResponseDto.class);
+
+            Quiz quiz = Quiz.builder()
+                    .videoId(transcriptRequestDto.getVideoId())
+                    .quizTitle(quizResponseDto.getTitle())
+                    .build();
+
+            List<Question> questions = quizResponseDto.getQuestions().stream()
+                    .map(questionItem -> Question.builder()
+                            .quiz(quiz)
+                            .question(questionItem.getQuestion())
+                            .topic(questionItem.getTopic())
+                            .optionA(questionItem.getOptionA())
+                            .optionB(questionItem.getOptionB())
+                            .optionC(questionItem.getOptionC())
+                            .optionD(questionItem.getOptionD())
+                            .correctAnswer(questionItem.getCorrectAnswer())
+                            .difficultyLevel(questionItem.getDifficultyLevel())
+                            .build()).toList();
+
+            quiz.setQuestionList(questions);
+            quizRepository.save(quiz);
 
             return quizResponseDto;
         } else {

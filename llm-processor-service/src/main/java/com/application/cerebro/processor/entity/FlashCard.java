@@ -11,16 +11,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "t_summaries")
-public class Summary {
+@Table(name = "t_flashcards")
+public class FlashCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long summaryId;
+    private Long cardId;
 
     @Column(nullable = false)
-    private String videoId;
+    private String title;
 
     @Lob
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String summary;
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "deck_id")
+    private FlashCardDeck deck;
 }
