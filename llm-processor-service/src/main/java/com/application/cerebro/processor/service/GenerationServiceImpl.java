@@ -31,7 +31,7 @@ public class GenerationServiceImpl implements GenerationService {
         return transcript;
     }
     @Override
-    public SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto){
+    public SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto, String userId){
         String transcript = extractTranscriptFromJson(transcriptRequestDto);
 
         String prompt = """
@@ -57,6 +57,7 @@ public class GenerationServiceImpl implements GenerationService {
                 .build();
 
         Summary summary = Summary.builder()
+                .userId(userId)
                 .summary(summaryResponseDto.getSummary())
                 .videoId(summaryResponseDto.getVideoId())
                 .build();

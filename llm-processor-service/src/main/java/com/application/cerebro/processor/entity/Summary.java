@@ -18,6 +18,9 @@ public class Summary {
     private Long summaryId;
 
     @Column(nullable = false)
+    private String userId;
+
+    @Column(nullable = false)
     private String videoId;
 
     @Lob

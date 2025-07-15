@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 
 public interface GenerationService {
 
-    SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto);
+    SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto, String userId);
 
     FlashCardResponseDto generateFlashCardsFromTranscript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException;
 
