@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  keycloak-mysql:
+    container_name: ${MYSQL_CONTAINER_NAME}
+    image: mysql:${MYSQL_VERSION}
+    volumes:
+      - ${MYSQL_DATA_VOLUME}:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+
+  keycloak:
+    container_name: ${KEYCLOAK_CONTAINER_NAME}
+    image: ${KEYCLOAK_IMAGE}
+    command: [ "start-dev", "--import-realm" ]
+    environment:
+      DB_VENDOR: ${DB_VENDOR}
+      DB_ADDR: ${DB_ADDR}
+      DB_DATABASE: ${MYSQL_DATABASE}
+      DB_USER: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+    ports:
+      - "${KEYCLOAK_PORT}:8080"
+    volumes:
+      - ${KEYCLOAK_REALMS_VOLUME}:/opt/keycloak/data/import/
+    depends_on:
+      - keycloak-mysql
