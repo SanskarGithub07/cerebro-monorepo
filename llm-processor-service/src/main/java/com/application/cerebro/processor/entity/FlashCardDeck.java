@@ -23,6 +23,9 @@ public class FlashCardDeck {
     @Column(nullable = false)
     private String videoId;
 
+    @Column(nullable = false)
+    private String userId;
+
     private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "deck", cascade = CascadeType.ALL, orphanRemoval = true)

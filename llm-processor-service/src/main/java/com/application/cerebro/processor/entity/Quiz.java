@@ -23,6 +23,9 @@ public class Quiz {
     @Column(nullable = false)
     private String videoId;
 
+    @Column(nullable = false)
+    private String userId;
+
     private LocalDateTime createdAt;
 
     private String quizTitle;

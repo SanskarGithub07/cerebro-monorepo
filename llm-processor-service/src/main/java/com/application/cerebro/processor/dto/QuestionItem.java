@@ -2,12 +2,14 @@ package com.application.cerebro.processor.dto;
 
 import com.application.cerebro.processor.Difficulty;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class QuestionItem {
     private String question;
     private String optionA;

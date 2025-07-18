@@ -10,8 +10,8 @@ public interface GenerationService {
 
     SummaryResponseDto generateSummaryFromTranscript(TranscriptRequestDto transcriptRequestDto, String userId);
 
-    FlashCardResponseDto generateFlashCardsFromTranscript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException;
+    FlashCardResponseDto generateFlashCardsFromTranscript(TranscriptRequestDto transcriptRequestDto, String userId) throws JsonProcessingException;
 
-    QuizResponseDto generateQuizFromTrancript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException;
+    QuizResponseDto generateQuizFromTrancript(TranscriptRequestDto transcriptRequestDto, String userId) throws JsonProcessingException;
 }
 

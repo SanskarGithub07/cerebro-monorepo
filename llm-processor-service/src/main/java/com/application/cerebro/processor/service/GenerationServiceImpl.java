@@ -68,7 +68,7 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
-    public FlashCardResponseDto generateFlashCardsFromTranscript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException {
+    public FlashCardResponseDto generateFlashCardsFromTranscript(TranscriptRequestDto transcriptRequestDto, String userId) throws JsonProcessingException {
         String transcript = extractTranscriptFromJson(transcriptRequestDto);
 
         String prompt = String.format("""
@@ -110,6 +110,7 @@ public class GenerationServiceImpl implements GenerationService {
 
             FlashCardDeck flashCardDeck = FlashCardDeck.builder()
                     .videoId(transcriptRequestDto.getVideoId())
+                    .userId(userId)
                     .build();
 
             List<FlashCard> flashCards = flashCardItemList.stream()
@@ -129,7 +130,7 @@ public class GenerationServiceImpl implements GenerationService {
     }
 
     @Override
-    public QuizResponseDto generateQuizFromTrancript(TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException {
+    public QuizResponseDto generateQuizFromTrancript(TranscriptRequestDto transcriptRequestDto, String userId) throws JsonProcessingException {
         String transcript = extractTranscriptFromJson(transcriptRequestDto);
 
         String prompt = """
@@ -181,6 +182,7 @@ public class GenerationServiceImpl implements GenerationService {
 
             Quiz quiz = Quiz.builder()
                     .videoId(transcriptRequestDto.getVideoId())
+                    .userId(userId)
                     .quizTitle(quizResponseDto.getTitle())
                     .build();
 

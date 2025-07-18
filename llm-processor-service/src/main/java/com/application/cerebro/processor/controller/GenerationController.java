@@ -31,14 +31,16 @@ public class GenerationController {
     }
 
     @PostMapping("/flashcards")
-    public ResponseEntity<FlashCardResponseDto> generateFlashCardsFromTranscript(@RequestBody @Valid TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException {
-        FlashCardResponseDto flashCardResponseDto = generationService.generateFlashCardsFromTranscript(transcriptRequestDto);
+    public ResponseEntity<FlashCardResponseDto> generateFlashCardsFromTranscript(@RequestBody @Valid TranscriptRequestDto transcriptRequestDto, @AuthenticationPrincipal Jwt jwt) throws JsonProcessingException {
+        String userId = jwt.getSubject();
+        FlashCardResponseDto flashCardResponseDto = generationService.generateFlashCardsFromTranscript(transcriptRequestDto, userId);
         return ResponseEntity.status(HttpStatus.OK).body(flashCardResponseDto);
     }
 
     @PostMapping("/quiz")
-    public ResponseEntity<QuizResponseDto> generateQuizFromTranscript(@RequestBody @Valid TranscriptRequestDto transcriptRequestDto) throws JsonProcessingException{
-        QuizResponseDto quizResponseDto = generationService.generateQuizFromTrancript(transcriptRequestDto);
+    public ResponseEntity<QuizResponseDto> generateQuizFromTranscript(@RequestBody @Valid TranscriptRequestDto transcriptRequestDto, @AuthenticationPrincipal Jwt jwt) throws JsonProcessingException{
+        String userId = jwt.getSubject();
+        QuizResponseDto quizResponseDto = generationService.generateQuizFromTrancript(transcriptRequestDto, userId);
         return ResponseEntity.status(HttpStatus.OK).body(quizResponseDto);
     }
 }

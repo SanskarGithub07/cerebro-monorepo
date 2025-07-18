@@ -30,4 +30,16 @@ public class SummaryServiceImpl implements SummaryService {
 
         return summaryResponseDtoList;
     }
+
+    @Override
+    public SummaryResponseDto getSummaryFromVideoId(String userId, String videoId) {
+        Summary summary = summaryRepository.findByUserIdAndVideoId(userId, videoId).get();
+
+        SummaryResponseDto summaryResponseDto = SummaryResponseDto.builder()
+                .videoId(summary.getVideoId())
+                .summary(summary.getSummary())
+                .build();
+
+        return summaryResponseDto;
+    }
 }
