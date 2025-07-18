@@ -1,6 +1,8 @@
 package com.application.cerebro.processor.controller;
 
 import com.application.cerebro.processor.dto.QuizResponseDto;
+import com.application.cerebro.processor.dto.ScoreResponseDto;
+import com.application.cerebro.processor.dto.SubmitRequestDto;
 import com.application.cerebro.processor.service.QuizService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,5 +31,12 @@ public class QuizController {
         String userId = jwt.getSubject();
         QuizResponseDto quiz = quizService.getQuizFromVideoId(userId, videoId);
         return ResponseEntity.status(HttpStatus.FOUND).body(quiz);
+    }
+
+    @PostMapping("/submit")
+    public ResponseEntity<ScoreResponseDto> submitQuizAndCalculateScore(@AuthenticationPrincipal Jwt jwt, @RequestBody SubmitRequestDto submitRequestDto){
+        String userId = jwt.getSubject();
+        ScoreResponseDto score = quizService.submitQuizAndCalculateScore(userId, submitRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(score);
     }
 }

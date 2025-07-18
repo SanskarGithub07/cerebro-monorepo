@@ -5,14 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class QuizResponseDto {
-    private Long quizId;
-    private String title;
-    private List<QuestionItem> questions;
+public class Answer {
+    private Integer questionId;
+    private String answer;
 }

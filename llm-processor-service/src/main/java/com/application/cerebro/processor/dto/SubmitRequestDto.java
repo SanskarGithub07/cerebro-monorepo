@@ -8,11 +8,10 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class QuizResponseDto {
+public class SubmitRequestDto {
     private Long quizId;
-    private String title;
-    private List<QuestionItem> questions;
+    private List<Answer> answerList;
 }

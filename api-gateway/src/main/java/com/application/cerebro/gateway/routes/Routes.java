@@ -20,7 +20,7 @@ public class Routes {
     @Bean
     public RouterFunction<ServerResponse> llmProcessorServiceRoute(){
         return GatewayRouterFunctions.route("llm_processor_service")
-                .route(RequestPredicates.path("/api/get/**"), HandlerFunctions.http("http://localhost:8081"))
+                .route(RequestPredicates.path("/api/**"), HandlerFunctions.http("http://localhost:8081"))
                 .route(RequestPredicates.path("/api/generate/**"), HandlerFunctions.http("http://localhost:8081"))
                 .build();
     }

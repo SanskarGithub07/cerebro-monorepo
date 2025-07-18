@@ -5,14 +5,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class QuizResponseDto {
+public class ScoreResponseDto {
     private Long quizId;
-    private String title;
-    private List<QuestionItem> questions;
+    private String userId;
+    private Integer score;
+    private Integer totalQuestions;
+    private LocalDateTime timestamp;
+
 }

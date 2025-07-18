@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class QuestionItem {
+    private Integer questionId;
     private String question;
     private String optionA;
     private String optionB;
