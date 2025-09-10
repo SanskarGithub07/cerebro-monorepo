@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TranscriptItem{
+public class TranscriptItemDto {
     private String text;
     private Double start;
     private Double duration;

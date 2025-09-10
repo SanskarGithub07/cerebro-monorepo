@@ -1,0 +1,15 @@
+version: "3.8"
+
+services:
+  ingestion-mysql:
+    container_name: ${MYSQL_CONTAINER_NAME}
+    image: mysql:${MYSQL_VERSION}
+    volumes:
+      - ${MYSQL_DATA_VOLUME}:/var/lib/mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}

@@ -11,5 +11,5 @@ import java.util.List;
 @NoArgsConstructor
 public class TranscriptResponseDto {
     private String videoId;
-    private List<TranscriptItem> transcript;
+    private List<TranscriptItemDto> transcript;
 }
